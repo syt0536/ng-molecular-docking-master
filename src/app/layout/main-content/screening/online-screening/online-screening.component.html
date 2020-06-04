@@ -1,0 +1,207 @@
+<nz-tabset>
+  <nz-tab nzTitle="Screening1">
+    <form nz-form class="form" (click)="openTooltip()" [formGroup]="screeningForm" (submit)="onSubmit()">
+      <div nz-row>
+        <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzRequired>Job name</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <input nz-input formControlName="work_name" placeholder="screen task">
+          <nz-form-explain *ngIf="screeningForm.get('work_name').dirty && screeningForm.get('work_name').errors || screeningForm.get('work_name').pending">
+            dock task！
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzRequired>Your email:</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <input nz-input  formControlName="work_decs" placeholder="xxxx@sina.com">
+          <nz-form-explain *ngIf="screeningForm.get('work_decs').dirty&&screeningForm.get('work_decs').hasError('required')">
+            xxxx@sina.com
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzRequired>Database select</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <nz-select formControlName="mol_db">
+            <nz-option nzLabel="zinc" nzValue="zinc"></nz-option>
+            <nz-option nzLabel="chembl" nzValue="chembl"></nz-option>
+            <nz-option nzLabel="wi" nzValue="wi"></nz-option>
+            <nz-option nzLabel="userDb" nzValue="userDb"></nz-option>
+          </nz-select>
+          <nz-form-explain></nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item *ngIf="screeningForm.value.mol_db === 'userDb'">
+        <nz-form-label [nzSpan]="8" [nzRequired]>用户分子库文件</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <input type="file"
+                 accept=".pdb"
+                 (change)="userDbFileChange($event)"
+          >
+          <span>&nbsp;请上传pdb格式的文件！</span>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8">Target select</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <nz-select formControlName="target_select">
+            <nz-option *ngFor="let target of seaTargets"
+                       [nzLabel]="target.target"
+                       [nzValue]="target.target"
+            ></nz-option>
+          </nz-select>
+          <nz-form-explain></nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- <nz-form-item>
+        <nz-form-label [nzSpan]="8">Box dimension</nz-form-label>
+      </nz-form-item> -->
+      <div nz-row ><div nz-col nzSpan="3"nzOffset="2">
+        <nz-form-item>
+          <nz-form-label >Box dimension</nz-form-label>
+        </nz-form-item></div>
+        <div nz-col nzSpan="5"nzOffset="0"><nz-form-item>
+          <nz-form-label [nzSpan]="8" nzRequired>x</nz-form-label>
+          <nz-form-control [nzSpan]="7">
+            <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="Size_x"></nz-input-number>
+            <nz-form-explain *ngIf="screeningForm.get('Size_x').dirty && screeningForm.get('Size_x').hasError('required')">
+              请输入x方向大小！
+            </nz-form-explain>
+            <!-- <span>x方向大小</span> -->
+          </nz-form-control>
+        </nz-form-item></div>
+        <div nz-col nzSpan="5"nzOffset="0"><nz-form-item>
+          <nz-form-label [nzSpan]="8" nzRequired>y</nz-form-label>
+          <nz-form-control [nzSpan]="7">
+            <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="Size_y"></nz-input-number>
+            <nz-form-explain *ngIf="screeningForm.get('Size_y').dirty && screeningForm.get('Size_y').hasError('required')">
+              请输入y方向大小！
+            </nz-form-explain>
+            <!-- <span>y方向大小</span> -->
+          </nz-form-control>
+        </nz-form-item></div>
+        <div nz-col nzSpan="5"nzOffset="0"><nz-form-item>
+      <nz-form-label [nzSpan]="8" nzRequired>z</nz-form-label>
+      <nz-form-control [nzSpan]="7">
+        <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="Size_z"></nz-input-number>
+        <nz-form-explain *ngIf="screeningForm.get('Size_z').dirty && screeningForm.get('Size_z').hasError('required')">
+          请输入z方向大小！
+        </nz-form-explain>
+        <!-- <span>z方向大小</span> -->
+      </nz-form-control>
+    </nz-form-item></div>
+      </div>
+      <!-- <nz-form-item>
+        <nz-form-label [nzSpan]="8">Grid center</nz-form-label>
+      </nz-form-item> -->
+      <div nz-row >
+        <div nz-col nzSpan="3"nzOffset="2">
+          <nz-form-item>
+            <nz-form-label >Box dimension</nz-form-label>
+          </nz-form-item></div>
+        <div nz-col nzSpan="5"nzOffset="0">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzRequired>x</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <nz-input-number [nzStep]="0.001" formControlName="Center_x"></nz-input-number>
+          <nz-form-explain *ngIf="screeningForm.get('Center_x').dirty && screeningForm.get('Center_x').hasError('required')">
+            请输入中心x坐标大小！
+          </nz-form-explain>
+          <!-- <span>中心x坐标</span> -->
+        </nz-form-control>
+      </nz-form-item>
+      </div>
+      <div nz-col nzSpan="5"nzOffset="0">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzRequired>y</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <nz-input-number [nzStep]="0.001" formControlName="Center_y"></nz-input-number>
+          <nz-form-explain *ngIf="screeningForm.get('Center_y').dirty && screeningForm.get('Center_y').hasError('required')">
+            请输入中心z坐标大小！
+          </nz-form-explain>
+          <!-- <span>中心y坐标</span> -->
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  
+      <div nz-col nzSpan="5"nzOffset="0">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzRequired>z</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <nz-input-number  [nzStep]="0.001" formControlName="Center_z"></nz-input-number>
+          <nz-form-explain *ngIf="screeningForm.get('Center_z').dirty && screeningForm.get('Center_z').hasError('required')">
+            请输入中心z坐标大小！
+          </nz-form-explain>
+          <!-- <span>中心z坐标</span> -->
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8">Write your SMILES</nz-form-label>
+  </nz-form-item>
+  <nz-form-item>
+
+    <nz-form-control [nzSpan]="12"nzOffset="4">
+      <input nz-input formControlName="work_name" placeholder="screen task">
+      <nz-form-explain *ngIf="screeningForm.get('work_name').dirty && screeningForm.get('work_name').errors || screeningForm.get('work_name').pending">
+        dock task！
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzRequired>Upload your receptor</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <input type="file"
+                 accept=".pdb"
+                 (change)="pdbTargetFileChange($event)"
+          >
+          <!--<nz-form-explain *ngIf="screeningForm.get('pdbFile').dirty && screeningForm.get('pdbFile').hasError('required')">-->
+          <!--请上传蛋白质文件！-->
+          <!--</nz-form-explain>-->
+          <span>&nbsp;请上传pdb格式的文件！</span>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control [nzSpan]="7" [nzOffset]="8">
+          <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="submit">提交任务</button>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="12">      <app-jsme [elementId]="'structure-search'"
+      [width]="'70%'"
+      [height]="'450px'"
+      [showDemo]="true"
+>loading JSME widget
+</app-jsme>
+<br/>
+<button mat-raised-button color="accent"  (click)="getJsmeSmiles()">
+  Get Smiles
+</button>
+<br/>
+<br/>
+<!-- <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="submit">提交任务</button> -->
+<!-- <button mat-icon-button (click)="getJsmeSmiles()" color="warn">
+  <mat-icon>trending_flat</mat-icon>
+</button> -->
+<nz-form-item>
+
+  <nz-form-control [nzSpan]="17"nzOffset="0">
+    <input nz-input formControlName="work_name" placeholder="screen task">
+    <nz-form-explain *ngIf="screeningForm.get('work_name').dirty && screeningForm.get('work_name').errors || screeningForm.get('work_name').pending">
+      dock task！
+    </nz-form-explain>
+  </nz-form-control>
+</nz-form-item>
+</div>
+  </div>
+    </form>
+  </nz-tab>
+  <nz-tab nzTitle="Screening2">
+    <app-online-screening2></app-online-screening2>
+  </nz-tab>
+</nz-tabset>

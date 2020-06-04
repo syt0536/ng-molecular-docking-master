@@ -1,0 +1,81 @@
+<form nz-form class="form"  (click)="openTooltip()" [formGroup]="dockingForm2" (submit)="onSubmit()">
+  <div nz-row>
+    <div nz-col nzSpan="10" nzOffset="2">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired>Job name</nz-form-label>
+    <nz-form-control [nzSpan]="7">
+      <input nz-input formControlName="work_name" placeholder="请输入任务名称">
+      <nz-form-explain *ngIf="dockingForm2.get('work_name').dirty && dockingForm2.get('work_name').errors || dockingForm2.get('work_name').pending">
+        请输入任务名称！
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired>Your email:</nz-form-label>
+    <nz-form-control [nzSpan]="7">
+      <input nz-input  formControlName="work_decs" placeholder="xxxx@sina.com">
+      <nz-form-explain *ngIf="dockingForm2.get('work_decs').dirty&&dockingForm2.get('work_decs').hasError('required')">
+        xxxx@sina.com
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <!--<nz-form-item>-->
+    <!--<nz-form-label [nzSpan]="8" nzRequired>分子库</nz-form-label>-->
+    <!--<nz-form-control [nzSpan]="7">-->
+      <!--<nz-select formControlName="mol_db">-->
+        <!--<nz-option nzLabel="zinc" nzValue=1></nz-option>-->
+        <!--<nz-option nzLabel="chembl" nzValue=2></nz-option>-->
+        <!--<nz-option nzLabel="wi" nzValue=3></nz-option>-->
+      <!--</nz-select>-->
+      <!--<nz-form-explain></nz-form-explain>-->
+    <!--</nz-form-control>-->
+  <!--</nz-form-item>-->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired>Upload your receptor</nz-form-label>
+    <nz-form-control [nzSpan]="7">
+      <input type="file"
+             accept=".pdb"
+             (change)="targetFileChange($event)"
+      >
+      <!--<nz-form-explain *ngIf="dockingForm.get('pdbFile').dirty && dockingForm.get('pdbFile').hasError('required')">-->
+      <!--请上传蛋白质文件！-->
+      <!--</nz-form-explain>-->
+      <span>&nbsp;请上传pdb格式的文件！</span>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired>Upload your complex</nz-form-label>
+    <nz-form-control [nzSpan]="7">
+      <input type="file"
+             accept=".pdb"
+             (change)="residuesFileChange($event)"
+      >
+      <span>&nbsp;请上传pdb格式的文件！</span>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired>Upload your ligands</nz-form-label>
+    <nz-form-control [nzSpan]="7">
+      <input type="file"
+             accept=".mol2"
+             (change)="mol2FileChange($event)"
+      >
+      <span>&nbsp;请上传mol2格式的文件！</span>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzSpan]="7" [nzOffset]="8">
+      <button nz-button [nzType]="'primary'">提交任务</button>
+    </nz-form-control>
+  </nz-form-item>
+</div>
+<div nz-col nzSpan="10">
+  <h1>Attention</h1>
+  <h2>If you want to submit your complex structure. You need pay attention to the
+    atom name of ligand.The atom name in ligand mol2 file must as same as it's name in 
+    complex pdb file. </h2>
+
+</div>
+<!-- <div nz-col nzSpan="2"></div> -->
+</div>
+</form>
